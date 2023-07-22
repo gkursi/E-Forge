@@ -5,6 +5,6 @@ A way to run e-klase.lv as a standalone app on your pc, also adds the ability to
 **Current features**: 
  * Run vanilla e-klase as an app on your pc.
 
-
-<a href="LICENSE">LICENSE</a><br>
-<a href="#">Latest release</a>
+**Links**
+* <a href="LICENSE">LICENSE</a><br>
+* [Latest release](https://github.com/gkursi/e-klase-mods/releases/latest)
