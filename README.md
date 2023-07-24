@@ -18,7 +18,6 @@ A way to change the appearance of e-klase and also add some extra functionality 
     * **6.** If you don't want to just get a ".exe" and you want to modify the code, stop here and just run `npm start` when you want to test the code.
     * **7.** Otherwise, follow the [Electron forge](https://www.electronjs.org/docs/latest/tutorial/quick-start#package-and-distribute-your-application) guide to build your `exe`.
     * **8.** Now there should be a program that you can run in the /out/ directory.
-    * **8.1** in the /out/ directory
 
 * If you need any help, feel free to open an issue here on GitHub or DM me on Discord (`_qweru`).
 
