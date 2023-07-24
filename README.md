@@ -1,12 +1,13 @@
 # E-klase.lv mods (e-forge)
-A way to run e-klase.lv as a standalone app on your pc, also adds the ability to add CSS mods
+A way to change the appearance of e-klase and also add some extra functionality to it,<br>
+with mods!<br>
 
 
 **Current features**: 
  * Run vanilla e-klase as an app on your pc.
 
 **Other info**
-* For source code, DM me on Discord (_qweru)
+* ~~For source code, DM me on Discord (_qweru)~~
 * License: MIT
 
 **Links**
