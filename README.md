@@ -4,7 +4,8 @@ with mods!<br>
 
 
 **Current features**: 
- * Run vanilla e-klase as an app on your pc.
+ * Run just e-klase as an app on your pc
+ * Add custom CSS 
 
 **Other info**
 * ~~For source code, DM me on Discord (_qweru)~~
