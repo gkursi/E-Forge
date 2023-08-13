@@ -65,3 +65,6 @@ module.exports = class ModReader {
 
   applyMods(webvar) {}
 };
+
+
+// todo: read mods mod.js, extract mod content, apply mod content
