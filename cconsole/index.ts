@@ -9,7 +9,7 @@ module.exports.warn = function _l(text, location) {
     }
 module.exports.info = function _l(text, location) {
         console.log(
-            "[%cWARN%c] %cInfo from %s: \n%c%s",
+            "[%cINFO%c] %cInfo from %s: \n%c%s",
             "color: rgb(60, 127, 166);",
             "", "color: rgb(60, 166, 122);",
             location, "color: rgb(235, 209, 181);", 

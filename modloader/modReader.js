@@ -6,15 +6,14 @@ const LOGGER = require('../cconsole')
 function mkdir(dir) {
     if (!fs.existsSync(dir)) {
       fsp.mkdir(dir)
-        .then(() => console.log("Created directory!"))
+        .then(() => LOGGER.info("Created directory!", "MODREADER#mkdir:9"))
         .catch((err) => {
-          console.error(err);
+          LOGGER.warn("Caught error: "+err, "MODREADER#mkdir:11")
           fsError = true;
         })
     }
 }
 
-LOGGER.warn("Warning text", "warning location")
 
 module.exports = class ModReader{
 
