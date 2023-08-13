@@ -6,6 +6,10 @@ A way to change the appearance of e-klase and also add some extra functionality 
 * Run just e-klase as an app on your PC
 * Add custom CSS
 
+**Mod help**:
+* [Docs](./docs/README.md)
+
+
 **How to use**:
 * If you just want the latest build, click the text "Latest release" under the Links section and download the attached file.
 * However, if you want the latest features (unstable), follow this tutorial, and you will hopefully be able to get the latest dev build.
