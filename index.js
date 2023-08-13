@@ -82,8 +82,6 @@ function applyCSS() {
       BrowserWindow.getAllWindows()[0]
         .webContents.executeJavaScript(
           `
-        console.log("Web content created event, applying css...");
-
         docHead = document.querySelector("head")
         docMain = document.querySelector("body")
 
