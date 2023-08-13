@@ -1,7 +1,6 @@
 // start
 if (require('electron-squirrel-startup')) return; // prevent from running twice
 
-
 ///////////////////////////// IMPORTS //////////////////////////////////////
 const { app, BrowserWindow, webContents, session } = require('electron')
 const fsp = require('fs/promises');
@@ -11,8 +10,8 @@ const { doesNotReject } = require('assert');
 
 const ModReader = require('./modloader/modReader')
 const LOGGER = require('./cconsole')
-// LOGGER.warn("Warnng text", "location");
-// LOGGER.info("Info text", "location");
+LOGGER.warn("Test warning", "INDEX:13");
+LOGGER.info("Test info", "INDEX:14");
 
 ///////////////////////////////////// CONFIG ///////////////////////////////////////////
 
