@@ -3,6 +3,7 @@ const fsp = require("fs/promises");
 const LOGGER = require("../cconsole");
 const decompress = require("decompress");
 const path = require("path");
+const { ifError } = require("assert");
 
 function mkdir(dir) {
   if (!fs.existsSync(dir)) {
@@ -13,6 +14,10 @@ function mkdir(dir) {
         LOGGER.warn("Caught error: " + err, "MODREADER#mkdir:11");
       });
   }
+}
+
+function modError(error){
+  alert("Got error while loading mods: "+error);
 }
 
 function rmdir(dir) {
@@ -46,7 +51,10 @@ module.exports = class ModReader {
     mkdir(this._modDir);
   }
 
-  loadMod(filename) {
+  async loadMod(filename) {
+
+    let returnError = "null";
+
     this.modFilePaths.push(filename);
     decompress(this.modDir + "/" + filename, this._modDir)
       .then((files) => {
@@ -61,10 +69,30 @@ module.exports = class ModReader {
     this.extractedFolderPaths.push(
       this._modDir + path.basename(filename).replace(".mod", "")
     );
+
+    this.extractedFolderPaths.forEach((value, index, array) => {
+      fsp
+        .readFile(value + "/mod.js")
+        .then((value) => {
+          LOGGER.info("Loading mod.js: " + value);
+        })
+        .catch((err) => {
+          LOGGER.warn(
+            "An error has been caught while loading a mod: " + err,
+            "MODREADER#loadMod:74"
+          );
+          if(returnError == "null") {
+            returnError = err+"; ";
+          } else {
+            returnError = returnError + err + ";";
+          }
+        });
+    });
+
+    return returnError;
   }
 
   applyMods(webvar) {}
 };
-
 
 // todo: read mods mod.js, extract mod content, apply mod content

@@ -1,3 +1,8 @@
+/*
+  TODO list: fix error debugging
+
+*/
+
 // start
 if (require("electron-squirrel-startup")) return; // prevent from running twice
 
@@ -10,6 +15,7 @@ const { doesNotReject } = require("assert");
 
 const ModReader = require("./modloader/modReader");
 const LOGGER = require("./cconsole");
+const { electron } = require("process");
 LOGGER.warn("Test warning", "INDEX:13");
 LOGGER.info("Test info", "INDEX:14");
 
@@ -50,6 +56,7 @@ function mkdir(dir) {
 
 let cssContent = [];
 let fsError = false;
+let fullModError = "";
 
 mkdir(fileDirectory + modDirToRead);
 fs.readdirSync(fileDirectory + modDirToRead).forEach((file) => {
@@ -71,7 +78,10 @@ fs.readdirSync(fileDirectory + modDirToRead).forEach((file) => {
       LOGGER.warn("Caught error: " + err, "INDEX:81");
     }
   } else if (file.toLowerCase().endsWith(".mod")) {
-    globModReader.loadMod(file);
+    let error = globModReader.loadMod(file);
+    if (error != "null") {
+      fullModError += error;
+    }
   }
 });
 
@@ -91,14 +101,38 @@ function applyCSS() {
     `
         )
         .then((value) => LOGGER.info("Executed CSS!", "INDEX#applyCSS:101"))
-        .catch((err) => {
-          LOGGER.warn("Caught error: " + err, "INDEX#applyCSS:103");
+        .catch((reason) => {
+          LOGGER.warn("Caught error: " + reason, "INDEX#applyCSS:103");
         });
     });
   }, 1);
 }
 
 //////////////////////////////////// WINDOWS /////////////////////////////////////////
+
+const createModErrorWindow = () => {
+  if (fullModError != "") {
+    const popup = new BrowserWindow({
+      width: 700,
+      height: 200,
+      resizable: false,
+      fullscreenable: false,
+      frame: true,
+      darkTheme: true,
+      movable: false,
+      title: "Main load error",
+      //   webPreferences: {
+      //     preload: path.join(__dirname, './html/js/preload.js')
+      //   }
+    });
+
+    // win.loadFile('html/index.html')
+    popup.loadFile("html/css_not_found.html");
+    popup.webContents.executeJavaScript(
+      'console.log("Got error: ' + fullModError + '");'
+    );
+  }
+};
 
 const createWindow = () => {
   if (fsError) {
@@ -153,9 +187,13 @@ const createWindow = () => {
 
 app.whenReady().then(() => {
   createWindow();
+  createModErrorWindow();
 
   app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+      createModErrorWindow();
+    }
   });
 });
 app.on("window-all-closed", () => {
