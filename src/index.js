@@ -1,10 +1,11 @@
 /*
-  TODO list: fix error debugging
-
+  TODO list: 
+    fix error debugging (Line)
+    remove debug log output before push (i will 100% forget)
 */
 
 // start
-if (require("electron-squirrel-startup")) return; // prevent from running twice
+if (require("electron-squirrel-startup")) return; // do not run during setup
 
 ///////////////////////////// IMPORTS //////////////////////////////////////
 const { app, BrowserWindow, webContents, session } = require("electron");
@@ -14,8 +15,8 @@ const os = require("os");
 
 const ModReader = require("./modloader/modReader");
 const LOGGER = require("./cconsole");
-LOGGER.warn("Test warning", "INDEX:13");
-LOGGER.info("Test info", "INDEX:14");
+// LOGGER.warn("Test warning", "INDEX:13");
+// LOGGER.info("Test info", "INDEX:14");
 
 ///////////////////////////////////// CONFIG ///////////////////////////////////////////
 
@@ -105,29 +106,15 @@ function applyCSS() {
 //////////////////////////////////// WINDOWS /////////////////////////////////////////
 
 const createWindow = () => {
-  if (globModReader.isErrorThrown()) {
-    const popup = new BrowserWindow({
-      width: 700,
-      height: 200,
-      title: "Mod load error",
-      icon: "./assets/favicon.ico",
-      //   webPreferences: {
-      //     preload: path.join(__dirname, './html/js/preload.js')
-      //   }
-    });
 
-    // win.loadFile('html/index.html')
-    popup.loadFile("html/css_not_found.html");
-  }
-
-  if (fsError) {
+  if (fsError || globModReader.isErrorThrown()) {
     const win = new BrowserWindow({
       width: 700,
       height: 200,
       frame: true,
       darkTheme: true,
-      title: "Main load error",
-      icon: "./assets/favicon-err.ico",
+      title: "Load error",
+      icon: "src/assets/favicon-err.ico",
       alwaysOnTop: true,
       //   webPreferences: {
       //     preload: path.join(__dirname, './html/js/preload.js')
@@ -135,7 +122,7 @@ const createWindow = () => {
     });
 
     // win.loadFile('html/index.html')
-    win.loadFile("html/css_not_found.html");
+    win.loadFile("src/html/css_not_found.html");
 
     win.webContents.on("dom-ready", () => {
       LOGGER.info("DOM event triggered", "INDEX?webcontents#dom-ready:132");

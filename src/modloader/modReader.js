@@ -33,7 +33,7 @@ function rmdir(dir) {
 }
 
 function applyCSS(css, webvar) {
-  LOGGER.info(">>>>>>>>>>>>>>>>>>>>>>>> "+css)
+  LOGGER.info(css) // debug
   webvar.executeJavascript(
     `
     document.querySelector("html")[0].innerHTML = docHead.innerHTML + "<style>` +
@@ -136,12 +136,12 @@ module.exports = class ModReader {
     fsp
       .writeFile(
         this.modDir + "/../latest.log",
-        `Latest E-Forge log!\n\n` +
-          `ERRORS: ` +
+        `Latest E-Forge log!\n` +
+          `\nERRORS: ` +
           errorOutput +
-          `INDEX_LOGS: ` +
+          `\nINDEX_LOGS: ` +
           globalLogger.getAllLogs() +
-          `MODREADER_LOGS: ` +
+          `\nMODREADER_LOGS: ` +
           LOGGER.getAllLogs()
       )
 
