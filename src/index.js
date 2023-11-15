@@ -11,11 +11,9 @@ const { app, BrowserWindow, webContents, session } = require("electron");
 const fsp = require("fs/promises");
 const fs = require("fs");
 const os = require("os");
-const { doesNotReject } = require("assert");
 
 const ModReader = require("./modloader/modReader");
 const LOGGER = require("./cconsole");
-const { electron } = require("process");
 LOGGER.warn("Test warning", "INDEX:13");
 LOGGER.info("Test info", "INDEX:14");
 
@@ -78,17 +76,13 @@ fs.readdirSync(fileDirectory + modDirToRead).forEach((file) => {
       LOGGER.warn("Caught error: " + err, "INDEX:81");
     }
   } else if (file.toLowerCase().endsWith(".mod")) {
-    let error = globModReader.loadMod(file);
-    if (error != "null") {
-      fullModError += error;
-    }
+    globModReader.loadMod(file);
   }
 });
 
 function applyCSS() {
   setTimeout(function () {
     cssContent.forEach((value, index, array) => {
-      LOGGER.info("Applying this CSS: " + value);
       BrowserWindow.getAllWindows()[0]
         .webContents.executeJavaScript(
           `
@@ -110,17 +104,13 @@ function applyCSS() {
 
 //////////////////////////////////// WINDOWS /////////////////////////////////////////
 
-const createModErrorWindow = () => {
-  if (fullModError != "") {
+const createWindow = () => {
+  if (globModReader.isErrorThrown()) {
     const popup = new BrowserWindow({
       width: 700,
       height: 200,
-      resizable: false,
-      fullscreenable: false,
-      frame: true,
-      darkTheme: true,
-      movable: false,
-      title: "Main load error",
+      title: "Mod load error",
+      icon: "./assets/favicon.ico",
       //   webPreferences: {
       //     preload: path.join(__dirname, './html/js/preload.js')
       //   }
@@ -128,23 +118,17 @@ const createModErrorWindow = () => {
 
     // win.loadFile('html/index.html')
     popup.loadFile("html/css_not_found.html");
-    popup.webContents.executeJavaScript(
-      'console.log("Got error: ' + fullModError + '");'
-    );
   }
-};
 
-const createWindow = () => {
   if (fsError) {
     const win = new BrowserWindow({
       width: 700,
       height: 200,
-      resizable: false,
-      fullscreenable: false,
       frame: true,
       darkTheme: true,
-      movable: false,
       title: "Main load error",
+      icon: "./assets/favicon-err.ico",
+      alwaysOnTop: true,
       //   webPreferences: {
       //     preload: path.join(__dirname, './html/js/preload.js')
       //   }
@@ -167,6 +151,7 @@ const createWindow = () => {
       darkTheme: true,
       movable: true,
       title: "Loading..",
+      icon: "./assets/favicon.ico",
       //   webPreferences: {
       //     preload: path.join(__dirname, './html/js/preload.js')
       //   }
@@ -178,7 +163,10 @@ const createWindow = () => {
     win.webContents.on("dom-ready", () => {
       LOGGER.info("DOM event triggered", "INDEX?webcontents#dom-ready:155");
       applyCSS();
-      globModReader.applyMods(BrowserWindow.getAllWindows()[0].webContents);
+      setTimeout(() => {
+        globModReader.applyMods(BrowserWindow.getAllWindows()[0].webContents);
+      }, 1);
+      
     });
   }
 };
@@ -187,16 +175,15 @@ const createWindow = () => {
 
 app.whenReady().then(() => {
   createWindow();
-  createModErrorWindow();
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
-      createModErrorWindow();
     }
   });
 });
 app.on("window-all-closed", () => {
+  globModReader.exit(LOGGER);
   if (process.platform !== "darwin") app.quit();
 });
 
@@ -204,6 +191,6 @@ app.on("web-contents-created", (webContents) => {
   LOGGER.info("Web content created! (event)", "INDEX?web-contents-created:178");
   applyCSS();
   setTimeout(() => {
-    // globModReader.applyMods(BrowserWindow.getAllWindows()[0].webContents);
+    globModReader.applyMods(BrowserWindow.getAllWindows()[0].webContents);
   }, 1);
 });

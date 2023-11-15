@@ -7,7 +7,7 @@
 ## Advanced mods
 
 <p> An advanced mod is a file ending with <code>.mod</code>.
-This file can contain multiple styles (for each page / global), scripts (javascript) ~~and images~~. **Notice**: You should only download a <code>.mod</code> file from trusted sources, since it can contain things like keyloggers, password stealers and other bad things.
+This file can contain multiple styles (for each page / global), scripts (javascript) ~~and images~~. **Notice**: You should only download a <code>.mod</code> file from trusted sources, as it can contain things like keyloggers, password stealers and other bad things.
 
 - ### Getting started
   - **INFO**: The `apply` tag is currently **NOT** supported, as i am lazy. 
