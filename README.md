@@ -1,6 +1,5 @@
 # E-Forge
-
-A way to change the appearance and functionality of e-klase, with mods!
+An Electron based app that allows you to change the appearance and functionality of e-klase, with mods!
 
 ## Features
 * Use E-klase as a desktop app
