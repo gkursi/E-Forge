@@ -33,17 +33,18 @@ function rmdir(dir) {
 }
 
 function applyCSS(css, webvar) {
-  LOGGER.info(css) // debug
-  webvar.executeJavascript(
+  // LOGGER.info(css) // debug
+  webvar.executeJavaScript(
     `
-    document.querySelector("html")[0].innerHTML = docHead.innerHTML + "<style>` +
+    docHeadd = document.querySelector("head")
+    docHeadd.innerHTML = docHeadd.innerHTML + "<style>` +
       css.toString().replace(/(\r\n|\n|\r)/gm, "") +
       `</style>"`
   );
 }
 
 function applyJS(js, webvar) {
-  webvar.executeJavascript(js.replace(/(\r\n|\n|\r)/gm, ""));
+  webvar.executeJavaScript(js.replace(/(\r\n|\n|\r)/gm, ""));
 }
 
 module.exports = class ModReader {
@@ -60,7 +61,7 @@ module.exports = class ModReader {
   }
 
   isErrorThrown() {
-    return this.errors != [];
+    return this.errors == [];
   }
 
   async loadMod(filename) {
@@ -76,15 +77,16 @@ module.exports = class ModReader {
         );
       });
     this.extractedFolderPaths.push(
-      this._modDir + path.basename(filename).replace(".mod", "")
+      this._modDir.replace("\\", "/") + path.basename(filename).replace(".mod", "")
     );
   }
 
   applyMods(webvar) {
+    let jsExecutable;
     this.extractedFolderPaths.forEach((value, index, array) => {
       let mod;
       try {
-        mod = require(value+"/mod.js");
+        mod = require(value+"\\mod.js");
         mod.mod_content.forEach((content, i, a) => {
           if(content["type"] == "style"){
 
@@ -99,7 +101,7 @@ module.exports = class ModReader {
 
             fsp.readFile(value+content["value"], "utf-8")
             .then((cdsh) => {
-              console.log(cdsh)
+              // console.log(cdsh)
               this.modScriptFiles.push(cdsh);
             })
             .catch((err) => {
@@ -124,7 +126,7 @@ module.exports = class ModReader {
     
     if (!this.errors == []) {
       LOGGER.warn(
-        "Warning: Some mods produced errors! " + this.errors,
+        "Warning: Some mods may have produced errors! " + this.errors,
         "MODREADER#applyMods:119"
       );
     }
@@ -147,6 +149,7 @@ module.exports = class ModReader {
 
       .then((value) => {
         LOGGER.info("Saved latest logs!", "code_end");
+        // LOGGER.info("[DEBUG] "+this.errors)
       })
       .catch((err) => {
         LOGGER.warn("Unable to save logs!", "code_end");

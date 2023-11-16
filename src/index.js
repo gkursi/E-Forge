@@ -1,6 +1,5 @@
 /*
   TODO list: 
-    fix error debugging (Line)
     remove debug log output before push (i will 100% forget)
 */
 
@@ -65,7 +64,7 @@ fs.readdirSync(fileDirectory + modDirToRead).forEach((file) => {
       fsp
         .readFile(fileDirectory + modDirToRead + file, "utf-8")
         .then((value) => {
-          LOGGER.info("File value: " + value, "INDEX:72");
+          // LOGGER.info("File value: " + value, "INDEX:72");
           cssContent.push(value);
         })
         .catch((err) => {
@@ -88,8 +87,6 @@ function applyCSS() {
         .webContents.executeJavaScript(
           `
         docHead = document.querySelector("head")
-        docMain = document.querySelector("body")
-
         docHead.innerHTML = docHead.innerHTML + "<style>` +
             value.replace(/(\r\n|\n|\r)/gm, "") +
             `</style>"
